@@ -2,24 +2,33 @@ import librosa
 import os
 import json
 import numpy as np
-
-DATASET_PATH = "data/raw/dataset"
-JSON_PATH = "data/processed/data.json"
-SAMPLES_TO_CONSIDER = 22050 * 30 # 1 sec worth of loading audio with librosa is 22050 samples/sec, multiply by 30 for 30 seconds, standardizes length of the audio files
+import hydra
+from omegaconf import DictConfig, OmegaConf
 
 
-def preprocess_dataset(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_length=512):
-    """_summary_
+@hydra.main(version_base=None, config_path='/Users/OliverGullery/Desktop/audio/src/config', config_name='config')
+def preprocess_dataset(cfg: DictConfig):
+    """
+    _summary_
     Extracts MFCCs from music dataset and saves them into a json file located in our processed data folder 
   
     Args:
-        dataset_path (_type_): _description_
-        json_path (_type_): _description_
-        n_mfcc (int, optional): _description_. Defaults to 13.
-        n_fft (int, optional): _description_. Defaults to 2048.
-        hop_length (int, optional): _description_. Defaults to 512.
+        cfg (DictConfig): Configuration object containing:
+            dataset_path (_type_): _description_
+            json_path (_type_): _description_
+            n_mfcc (int, optional): _description_. Defaults to 13.
+            n_fft (int, optional): _description_. Defaults to 2048.
+            hop_length (int, optional): _description_. Defaults to 512.
     """
     # data dictoinary
+    # print(OmegaConf.to_yaml(cfg)) 
+    # return
+    dataset_path = cfg.dataset.path
+    json_path = cfg.dataset.json_path
+    samples_to_consider = cfg.dataset.samples_to_consider
+    n_mfcc = cfg.dataset.n_mfcc
+    n_fft = cfg.dataset.n_fft
+    hop_length = cfg.dataset.hop_length
     
     data = {
         "mappings": [],
@@ -49,9 +58,9 @@ def preprocess_dataset(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_lengt
                 signal, sample_rate = librosa.load(file_path) 
                 
                 # dropping audio files with less than pre-decided number of samples 
-                if len(signal) >= SAMPLES_TO_CONSIDER: 
+                if len(signal) >= samples_to_consider: 
                     
-                    signal = signal[:SAMPLES_TO_CONSIDER] # ensure consistency of the length of the signal
+                    signal = signal[:samples_to_consider] # ensure consistency of the length of the signal
                     
                     # Extract MFCCs
                     MFCCs = librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=n_mfcc, n_fft=n_fft,hop_length=hop_length)
@@ -67,4 +76,6 @@ def preprocess_dataset(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_lengt
 
 # Ensures method is only executed when script is run directly, not when it is imported as a module in another script
 if __name__ == "__main__": 
-    preprocess_dataset(DATASET_PATH, JSON_PATH)
+    preprocess_dataset()
+    
+    
