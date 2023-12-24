@@ -1,4 +1,4 @@
-# install with conda env create -f cpsc330env.yml 
+# install with conda env create -f audio.yml 
 name: 'audio'
 channels:
   - conda-forge
@@ -18,6 +18,9 @@ dependencies:
   - seaborn
   - tensorflow
   - librosa
+  - keras
+  - hydra-core  # Added Hydra
+  - omegaconf  # Added OmegaConf
   - pip:
     # - otter-grader==5.1.3
     - graphviz
