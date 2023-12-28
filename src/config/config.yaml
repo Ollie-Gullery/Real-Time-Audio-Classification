@@ -8,11 +8,14 @@ dataset: # used for prepare_dataset.py
   hop_length: 512
 
 training: # used to train_model.py
+  loss: "sparse_categorical_crossentropy"
   data_path: "data/processed/data.json"
-  learning_rate: 0.0001
+  learning_rate: 0.0001 # Customary Value for learning rate
   epochs: 40
-  batch_size: 32
+  batch_size: 32 # Number of samples before running back prop or learning step 
   patience: 5
-  saved_model_path: "models/model.h5"
+  saved_model_path: "../../models/model.keras"
   test_size: 0.2
   validation_size: 0.2
+  
+

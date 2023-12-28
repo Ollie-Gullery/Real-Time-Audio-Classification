@@ -6,7 +6,7 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 
 
-@hydra.main(version_base=None, config_path='/Users/OliverGullery/Desktop/audio/src/config', config_name='config')
+@hydra.main(version_base=None, config_path='config', config_name='config')
 def preprocess_dataset(cfg: DictConfig):
     """
     _summary_
@@ -20,9 +20,6 @@ def preprocess_dataset(cfg: DictConfig):
             n_fft (int, optional): _description_. Defaults to 2048.
             hop_length (int, optional): _description_. Defaults to 512.
     """
-    # data dictoinary
-    # print(OmegaConf.to_yaml(cfg)) 
-    # return
     dataset_path = cfg.dataset.path
     json_path = cfg.dataset.json_path
     samples_to_consider = cfg.dataset.samples_to_consider
@@ -42,7 +39,7 @@ def preprocess_dataset(cfg: DictConfig):
         
 
         # ensure we're at sub-folder level
-        if dirpath != dataset_path:
+        if dirpath is not dataset_path:
             
             # save label (i.e., sub-folder name) in the mapping
             label = dirpath.split("/")[-1]
@@ -67,7 +64,9 @@ def preprocess_dataset(cfg: DictConfig):
                     
                     # Store data for analysed track
                     data["MFCCs"].append(MFCCs.T.tolist())
-          
+                    data["labels"].append(i-1)
+                    data["files"].append(file_path)
+                    print("{}: {}".format(file_path, i-1))
             # print(data["MFCCs"]) # To check outputs 
     
     # save data in json file
