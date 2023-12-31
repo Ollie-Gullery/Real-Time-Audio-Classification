@@ -159,7 +159,7 @@ def train(cfg:DictConfig, model, X_train, y_train, X_validation, y_validation):
                         epochs=epochs,
                         batch_size=batch_size,
                         validation_data=(X_validation, y_validation),
-                        callbacks=[earlystop_callback])
+                        callbacks=[earlystop_callback], shuffle = True) # added shuffle = True
     return history
 
 
@@ -191,7 +191,9 @@ def plot_history(history):
 
 @hydra.main(version_base=None, config_path='../config', config_name='config')  
 def main(cfg:DictConfig):
-
+    # cfg = OmegaConf.load("src/config/config.yaml")
+    # print(cfg)
+    # return
     data_path = cfg.training.data_path
     saved_model_path = cfg.training.saved_model_path
     
@@ -214,9 +216,15 @@ def main(cfg:DictConfig):
     print("\nTest loss: {}, test accuracy: {}".format(test_loss, 100*test_acc))
     
     # save the model 
-    print("Saving model to:", saved_model_path)
-    model.save(saved_model_path)
-    
+    # print("Saving model to:", saved_model_path)
+    # model.save("model.keras")
+    try:
+        print("Saving model to:", saved_model_path)
+        model.save(saved_model_path)
+        print("Model saved successfully.")
+    except Exception as e:
+        print("Error saving the model:", e)
+        
 if __name__ == "__main__":
     main()
 
