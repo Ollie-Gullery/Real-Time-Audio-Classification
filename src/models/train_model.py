@@ -119,15 +119,17 @@ def build_model(cfg:DictConfig, input_shape):
     model.add(tf.keras.layers.Dense(64, activation='relu'))
     tf.keras.layers.Dropout(0.3) # model.add(tf.keras.layers.Dropout(0.3))
     
-    # output layer (softmax classifer)
-    model.add(tf.keras.layers.Dense(10, activation='softmax'))
+    # output layer (no activation function, instead use BCE with logits )
+    model.add(tf.keras.layers.Dense(1))
 
     optimiser = tf.optimizers.Adam(learning_rate=learning_rate)
     # compile model
+    # model.compile(optimizer=optimiser, 
+    #               loss= loss, # BCE with logits
+    #               metrics=["accuracy"])
     model.compile(optimizer=optimiser, 
-                  loss= loss,
-                  metrics=["accuracy"])
-    
+                  loss= tf.losses.BinaryCrossentropy(from_logits=True), # BCE with logits
+                  metrics=["accuracy"])   
     # model parameters on console
     model.summary()
         
@@ -216,14 +218,12 @@ def main(cfg:DictConfig):
     print("\nTest loss: {}, test accuracy: {}".format(test_loss, 100*test_acc))
     
     # save the model 
-    # print("Saving model to:", saved_model_path)
-    # model.save("model.keras")
     try:
-        print("Saving model to:", saved_model_path)
+        print(f"Saving model to: {saved_model_path}")
         model.save(saved_model_path)
         print("Model saved successfully.")
     except Exception as e:
-        print("Error saving the model:", e)
+        print(f"Error saving the model: {e}")
         
 if __name__ == "__main__":
     main()

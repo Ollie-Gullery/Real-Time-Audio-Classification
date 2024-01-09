@@ -1,0 +1,29 @@
+dataset:
+  path: data/raw/dataset
+  json_path: data/processed/data.json
+  samples_to_consider: 661500
+  sample_rate: 22050
+  windows:
+  - label: 0.25s
+    duration: 0.25
+  - label: 1s
+    duration: 1.0
+  - label: 5s
+    duration: 5.0
+  n_mfcc: 13
+  n_fft: 2048
+  hop_length: 512
+training:
+  loss:
+    class: tf.losses.BinaryCrossentropy
+    params:
+      from_logits: true
+  activation: sigmoid
+  data_path: data/processed/data.json
+  learning_rate: 0.0001
+  epochs: 40
+  batch_size: 32
+  patience: 5
+  saved_model_path: models/model.keras
+  test_size: 0.2
+  validation_size: 0.2
