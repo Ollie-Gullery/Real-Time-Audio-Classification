@@ -52,6 +52,13 @@ class DataProcessor:
         return train_clips, validation_clips, test_clips
     
     def preprocess_dataset(self):
+        """_summary_
+        Preprocesses dataset into json format with librosa by obtaining MFCCs for each clip. 
+        Creates, train, test, and validation data for window size specified in 
+        config file. 
+        Args:
+            cfg (DictConfig): _description_ in config.yaml
+        """
         dataset_path = self.cfg.preprocess.path
         n_mfcc = self.cfg.preprocess.n_mfcc
         n_fft = self.cfg.preprocess.n_fft
@@ -111,6 +118,10 @@ class DataProcessor:
         
         return
             
+    def verify_data():
+        # Obtain statistics and data summary to check validity of data 
+        pass
+
 @hydra.main(version_base=None, config_path='config', config_name='config')
 def main(cfg: DictConfig):
     processor = DataProcessor(cfg)

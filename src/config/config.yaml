@@ -1,6 +1,6 @@
 # config.yaml
 
-preprocess:
+preprocess: # Used in: Prepare_dataset.py 
   path: "data/raw/dataset"
   json_path: "data/processed/data.json"
   test_size: 0.2
@@ -10,43 +10,39 @@ preprocess:
   hop_length: 512 # 512 for latency reasons - can reduce to improve model 
   sample_rate: 22050 # 1 second worth of loading audio with librosa is 22050 samples/second
   window_size: 0.25 # 0.25 seconds
-  
 
 
-dataset: # used for prepare_dataset.py
-  path: "data/raw/dataset"
-  json_path: "data/processed/data.json"
-  samples_to_consider: 661500  # 22050 * 30, 1 sec worth of loading audio with librosa is 22050 samples/sec, multiply by 30 for 30 seconds, standardizes length of the audio files
-  sample_rate: 22050
-  windows:
-    - label: "5s"
-      duration: 5.0 # 5 seconds
-    - label: "1s"
-      duration: 1.0  # 1 second
-    - label: "0.25s"
-      duration: 0.25 # 0.25 seconds
-  n_mfcc: 13
-  n_fft: 2048
-  # hop_length: 512
-
-training: # used to train_model.py
+training: # Used in: train_model.py  
+  train_path: "data/processed/data_train.json"
+  test_path: "data/processed/data_test.json"
+  validation_path: "data/processed/data_validation.json"
   loss:
     class: tf.losses.BinaryCrossentropy
     params:
       from_logits: true
-  activation: sigmoid
-  # data_path: "data/processed/data.json"
-  # data_path: "data/processed/data_0.25s.json"
-  learning_rate: 0.0001 # Customary Value for learning rate
+  learning_rate: 0.0001
   epochs: 4 # 40
   batch_size: 32 # Number of samples before running back prop or learning step 
   patience: 5
   saved_model_path: "models/model.keras"
-  test_size: 0.2
-  validation_size: 0.2
-  train_path: "data/processed/data_train_0.25s.json"
-  test_path: "data/processed/data_test_0.25s.json"
-  validation_path: "data/processed/data_validation_0.25s.json"
+
+# training: # used to train_model.py
+#   loss:
+#     class: tf.losses.BinaryCrossentropy
+#     params:
+#       from_logits: true
+#   # data_path: "data/processed/data.json"
+#   # data_path: "data/processed/data_0.25s.json"
+#   learning_rate: 0.0001 # Customary Value for learning rate
+#   epochs: 4 # 40
+#   batch_size: 32 # Number of samples before running back prop or learning step 
+#   patience: 5
+#   saved_model_path: "models/model.keras"
+#   test_size: 0.2
+#   validation_size: 0.2
+#   train_path: "data/processed/data_train_0.25s.json"
+#   test_path: "data/processed/data_test_0.25s.json"
+#   validation_path: "data/processed/data_validation_0.25s.json"
   
 predictions:
   saved_model_path: "../../models/model.keras"
