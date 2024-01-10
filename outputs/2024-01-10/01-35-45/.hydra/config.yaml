@@ -1,0 +1,34 @@
+preprocess:
+  path: data/raw/dataset
+  json_path: data/processed/data.json
+  test_size: 0.2
+  validation_size: 0.2
+  n_mfcc: 13
+  n_fft: 2048
+  hop_length: 512
+  sample_rate: 22050
+  window_size: 0.25
+training:
+  train_path: data/processed/data_train.json
+  test_path: data/processed/data_test.json
+  validation_path: data/processed/data_validation.json
+  loss:
+    class: tf.losses.BinaryCrossentropy
+    params:
+      from_logits: true
+  learning_rate: 0.0001
+  epochs: 4
+  batch_size: 32
+  patience: 5
+  saved_model_path: models/model.keras
+predictions:
+  data_path:
+    music: data/raw/prediction_data/music_predict/music_predict.wav
+    speech: data/raw/prediction_data/speech_predict/speech_predict.wav
+  saved_model_path: ../../models/model.keras
+  samples_to_consider: 22050
+  n_mfcc: 13
+  n_fft: 2048
+  hop_length: 512
+  sample_rate: 22050
+  window_size: 0.25

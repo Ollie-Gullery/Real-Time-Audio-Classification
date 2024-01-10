@@ -29,10 +29,10 @@ class AudioClassifier:
             with open(data_path, "r") as fp:
                 data = json.load(fp)
         except Exception as e:
-            print(f'Error lodaing data: {e}')
+            print(f'Error loading data: {e}')
             return None, None
 
-        X = np.array(data["MFCCs"])
+        X = np.array(data["MFCCs"], dtype=np.float32)
         y = np.array(data["labels"])
         print("Data Loaded")
         return X, y
