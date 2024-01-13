@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 import keras
 import hydra
 from omegaconf import DictConfig, OmegaConf
-
+from sklearn.metrics import classification_report
 
 class AudioClassifier:
     def __init__(self, cfg:DictConfig):
@@ -179,14 +179,34 @@ class AudioClassifier:
     def evaluate_model(self, model, X_test, y_test):
         print("Loading Test Set")
         try:
+            # Classification report
+            logits = model.predict(X_test)
+            probabilities = tf.sigmoid(logits).numpy()
+            
+            y_pred = (probabilities > self.cfg.training.threshold)
+
+            # Check shapes
+            print(f"Shapes - y_test: {y_test.shape}, y_pred: {y_pred.shape}")  
+                 
+            print("\nClassification Report:")
+            print(classification_report(y_test, y_pred, target_names=["Class 0: Music", "Class 1: Speech"]))
+            
+            # Test Accuracy
             test_loss, test_acc = model.evaluate(X_test, y_test)
             print("\nTest loss: {}, test accuracy: {}".format(test_loss, 100*test_acc))
+
         except Exception as e:
-            print("Error loading Test Set")    
-        # save the model 
+            print(f"Error evaluating test set: {e}")    
+        
+        
 
 
     def save_model(self, model):
+        """_summary_
+        Saves model into .keras format in file path saved_model_path specified in config.yaml 
+        Args:
+            model (_type_): _description_
+        """
         saved_model_path = self.cfg.training.saved_model_path
         try:
             print(f"Saving model to: {saved_model_path}")

@@ -6,40 +6,29 @@ import hydra
 import os
 from omegaconf import DictConfig, OmegaConf
 
-class _Audio_Classifer:
+class _Audio_Classifier:
     
-    model = None
-    _instance = None
+
+    _instance = None # singleton design pattern 
     
     _mappings = [
         "Music",
         "Speech"
     ]
     
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(_Audio_Classifier, cls).__new__(cls)
+            cls._instance.initialized = False
+            
+        return cls._instance
     
     def __init__(self, cfg):
-        self.cfg = cfg
-        
-    # @staticmethod
-    # def load_data(file_path):
-    #     """_summary_
-    #     Loads file 
-    #     Args:
-    #         cfg (DictConfig): Configuration object containing:
-    #             data_path (str): Path to json file containing data 
-    #     Returns:
-    #         :return X (ndarray): Inputs
-    #         :return y (ndarray): Targets
-    #     """
-    #     file = os.path.basename(file_path)
-    #     try:
-    #         with open(file_path, "r") as fp:
-    #             data = json.load(fp)
-    #     except Exception as e:
-    #         print(f'Error loading data: {e}')
-    #         return
-        
-    #     return file
+        if not self.initialized:  
+            self.cfg = cfg
+            self.model = tf.keras.models.load_model(cfg.predictions.saved_model_path)
+            self.initialized = True
+
     
     @staticmethod
     def sigmoid(x):
@@ -94,57 +83,60 @@ class _Audio_Classifer:
         
             # get predicted label
             logits = self.model.predict(mfcc)
-            probabilities = self.sigmoid(logits)
-            print(probabilities)
-            predicted_class = self._mappings[int(probabilities > 0.5)]
+            probability = self.sigmoid(logits)
+            print(probability)
+            predicted_class = self._mappings[int(probability > self.cfg.predictions.threshold)]
             all_predictions.append(predicted_class)
-            print(f'Segment {count} Prediction: {predicted_class}')
+            print(f'Segment {count} | Prediction: {predicted_class} | Probability {probability}')
             
         return all_predictions
-                    
-# @hydra.main(version_base=None, config_path='config', config_name='config') 
-# def Audio_Classifier(cfg: DictConfig):    
-#     """Factory function for Audio Classifier Class 
-
-#     :return _Audio_Classifier._instance:
-#     """
-  
-#     if _Audio_Classifer._instance is None:
-#         _Audio_Classifer._instance = _Audio_Classifer(cfg)
-#         _Audio_Classifer.model = tf.keras.models.load_model(cfg.predictions.saved_model_path)
-#     return _Audio_Classifer._instance
 
 
-# file_path =  "data/raw/prediction_data/music_predict"
+ 
 
-# if __name__ == "__main__":
-#     # creating 2 instances of audio classifier
+def Audio_Classifier():    
+    """Factory function for Audio Classifier Class 
+
+    :return _Audio_Classifier._instance:
+    """
     
-#     ac = Audio_Classifier()
-#     ac1 = Audio_Classifier()
-#     print(ac)
-#     assert ac is ac1
+    cfg = OmegaConf.load("src/config/config.yaml")
+    return _Audio_Classifier(cfg)
 
-#     # make prediction
-#     prediction = ac.predict("data/raw/prediction_data/music_predict")
-#   
+file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
+
+# ac = Audio_Classifier()
+# ac.predict(file_path)
+
+if __name__ == "__main__":
+    # creating 2 instances of audio classifier
+    
+    ac = Audio_Classifier()
+    ac1 = Audio_Classifier()
+    
+    assert ac is ac1 # Ensures that ac and ac1 are the same instance (singleton pattern is working)
+    
+    # make prediction
+    prediction = ac.predict(file_path)
+  
+
 
 
 # cfg = OmegaConf.load("src/config/config.yaml")
 # print(cfg.predictions.data_path.music)
 
-@hydra.main(version_base=None, config_path='config', config_name='config')
-def main(cfg:DictConfig):
-    # file = "data/raw/prediction_data/music_predict/predict.wav"
-    file = cfg.predictions.data_path.music
-    # file = cfg.predictions.data_path.speech
-    classifier = _Audio_Classifer(cfg)
-    classifier.model = tf.keras.models.load_model(cfg.predictions.saved_model_path)
-    # print(classifier.model)
-    prediction = classifier.predict(file) 
+# @hydra.main(version_base=None, config_path='config', config_name='config')
+# def main(cfg:DictConfig):
+#     file = "data/raw/prediction_data/music_predict/predict.wav"
+#     # file = cfg.predictions.data_path.music
+#     # file = cfg.predictions.data_path.speech
+#     classifier = _Audio_Classifer(cfg)
+#     classifier.model = tf.keras.models.load_model(cfg.predictions.saved_model_path)
+#     # print(classifier.model)
+#     prediction = classifier.predict(file) 
     
-    print(prediction)
-    print(file)
+#     print(prediction)
+#     print(file)
     
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

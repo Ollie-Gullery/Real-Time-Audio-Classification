@@ -24,8 +24,11 @@ training: # Used in: train_model.py
   epochs: 4 # 40
   batch_size: 32 # Number of samples before running back prop or learning step 
   patience: 5
+  threshold: 0.6 # Threshhold for Sigmoid Predictions
   saved_model_path: "models/model.keras"
   
+# to do: hyper param optimiszation -> data aug -> more performance metrics 
+
 predictions:
   data_path: 
     music: "data/raw/prediction_data/music_predict/music_predict.wav"
@@ -37,3 +40,4 @@ predictions:
   hop_length: 512 # 512 for latency reasons - can reduce to improve model 
   sample_rate: 22050 # 1 second worth of loading audio with librosa is 22050 samples/second
   window_size: 0.25 # 0.25 seconds
+  threshold: 0.6 # Threshhold for Sigmoid Predictions
