@@ -101,12 +101,11 @@ def Audio_Classifier():
     """
     
     cfg = OmegaConf.load("src/config/config.yaml")
+    
     return _Audio_Classifier(cfg)
 
 file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
 
-# ac = Audio_Classifier()
-# ac.predict(file_path)
 
 if __name__ == "__main__":
     # creating 2 instances of audio classifier
@@ -121,22 +120,3 @@ if __name__ == "__main__":
   
 
 
-
-# cfg = OmegaConf.load("src/config/config.yaml")
-# print(cfg.predictions.data_path.music)
-
-# @hydra.main(version_base=None, config_path='config', config_name='config')
-# def main(cfg:DictConfig):
-#     file = "data/raw/prediction_data/music_predict/predict.wav"
-#     # file = cfg.predictions.data_path.music
-#     # file = cfg.predictions.data_path.speech
-#     classifier = _Audio_Classifer(cfg)
-#     classifier.model = tf.keras.models.load_model(cfg.predictions.saved_model_path)
-#     # print(classifier.model)
-#     prediction = classifier.predict(file) 
-    
-#     print(prediction)
-#     print(file)
-    
-# if __name__ == "__main__":
-#     main()

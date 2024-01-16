@@ -21,6 +21,8 @@ dependencies:
   - keras
   - hydra-core  # Added Hydra
   - omegaconf  # Added OmegaConf
+  - gunicorn   # Added Gunicorn
+  - flask      # Added Flask
   - pip:
     # - otter-grader==5.1.3
     - graphviz
