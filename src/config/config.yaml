@@ -21,7 +21,7 @@ training: # Used in: train_model.py
     params:
       from_logits: true
   learning_rate: 0.0001
-  epochs: 4 # 40
+  epochs: 40 
   batch_size: 32 # Number of samples before running back prop or learning step 
   patience: 5
   threshold: 0.6 # Threshhold for Sigmoid Predictions
