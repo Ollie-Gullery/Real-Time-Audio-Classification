@@ -66,12 +66,31 @@ class _Audio_Classifier:
                     mfcc_list.append(MFCCs.T)
         
         # Creating Prediction Array
-        prediction_array = np.array(mfcc_list, dtype = np.float32)
+        MFCCs_array = np.array(mfcc_list, dtype = np.float32)
         
-        return prediction_array
+        return MFCCs_array
+    
+    def predict_signal(self, signal, is_MFCC = False):
+        # obtain variables
+        n_mfcc = self.cfg.predictions.n_mfcc
+        n_fft = self.cfg.predictions.n_fft
+        window_size = self.cfg.predictions.window_size
+        sample_rate = self.cfg.predictions.sample_rate
+        hop_length = self.cfg.predictions.hop_length
+        if is_MFCC == False:
+            mfcc = librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_length)
+             
+        else:
+            mfcc = signal
+        mfcc = mfcc[np.newaxis, ..., np.newaxis]
+        mfcc = mfcc.reshape(-1, 11, 13, 1)
+        logits = self.model.predict(mfcc)
+        probability = self.sigmoid(logits)
+        predicted_class = self._mappings[int(probability > self.cfg.predictions.threshold)]
+        print(f'Prediction {predicted_class}')
+        return predicted_class
                     
     def predict(self, file_path):
-        
         MFCCs = self.preprocess(file_path)
         all_predictions = []
         count = 0
@@ -114,9 +133,19 @@ if __name__ == "__main__":
     ac1 = Audio_Classifier()
     
     assert ac is ac1 # Ensures that ac and ac1 are the same instance (singleton pattern is working)
-    
-    # make prediction
     prediction = ac.predict(file_path)
+    # make prediction
+    print("Making Prediction")
+
+    
+    # single_prediction = ac.predict_signal(mfcc, is_MFCC=True)
+    print("looping predictions")
+    for i in range(11):
+        mfcc = ac.preprocess(file_path)[i]
+        single_prediction = ac.predict_signal(mfcc, is_MFCC=True)
+        print(f"Prediction:{prediction[i]} \n Single Prediction: {single_prediction}")
+
+    
   
 
 
