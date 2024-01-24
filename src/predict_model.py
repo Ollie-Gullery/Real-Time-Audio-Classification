@@ -71,6 +71,15 @@ class _Audio_Classifier:
         return MFCCs_array
     
     def predict_signal(self, signal, is_MFCC = False):
+        """_summary_
+        Predicts between music or speech for a singular signal
+        Args:
+            signal (_type_): _description_
+            is_MFCC (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            _type_: predicted class 
+        """
         # obtain variables
         n_mfcc = self.cfg.predictions.n_mfcc
         n_fft = self.cfg.predictions.n_fft
@@ -83,7 +92,7 @@ class _Audio_Classifier:
         else:
             mfcc = signal
         mfcc = mfcc[np.newaxis, ..., np.newaxis]
-        mfcc = mfcc.reshape(-1, 11, 13, 1)
+        mfcc = mfcc.reshape(-1, 11, 13, 1) # reshaping as pyaudio signal different to librosa which was used to train model
         logits = self.model.predict(mfcc)
         probability = self.sigmoid(logits)
         predicted_class = self._mappings[int(probability > self.cfg.predictions.threshold)]
@@ -91,6 +100,14 @@ class _Audio_Classifier:
         return predicted_class
                     
     def predict(self, file_path):
+        """_summary_
+        Classifies audio file based on 0.25s second segments 
+        Args:
+            file_path (_type_): Path for audio file
+
+        Returns:
+            _type_: Predictions
+        """
         MFCCs = self.preprocess(file_path)
         all_predictions = []
         count = 0

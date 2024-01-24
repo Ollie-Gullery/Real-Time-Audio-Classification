@@ -41,3 +41,13 @@ predictions:
   sample_rate: 22050 # 1 second worth of loading audio with librosa is 22050 samples/second
   window_size: 0.25 # 0.25 seconds
   threshold: 0.6 # Threshhold for Sigmoid Predictions
+
+
+real_time:
+  format: "pyaudio.paInt16"
+  channels: 1
+  sample_rate: 22050
+  window_size: 0.25 # 0.25seconds
+  # CHUNK = int(SAMPLE_RATE * WINDOW_SIZE)
+  wave_output_filename: "output.wav"
+  prediction_csv: "predictions.csv"
