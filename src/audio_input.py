@@ -8,7 +8,7 @@ from omegaconf import DictConfig, OmegaConf
 import librosa
 import threading
 import queue
-
+import time 
 # audio_clf = Audio_Classifier()
 class RealTimeClassification():
     def __init__(self, audio_clf, cfg):
@@ -17,28 +17,30 @@ class RealTimeClassification():
         self.chunk = int(self.cfg.real_time.sample_rate * self.cfg.real_time.window_size)
         self.format = pyaudio.paInt16
         self.frames = []
+        self.stop_signal = threading.Event()
         self.data_queue = queue.Queue()
         self.prediction_array = []
     def audio_streaming_thread(self,stream):
         print("Audio Streaming Started...")
-        while True:
+        while not self.stop_signal.is_set():
             try:
                 data = stream.read(self.chunk, exception_on_overflow= False)
+                print(data)
                 self.data_queue.put(data)
                 self.frames.append(data)
             except Exception as e:
                 print(f"Streaming Thread Error: {e}")
                 break
     def audio_processing_thread(self):
-        print("Audio Classificatoin Starting:")
-        while True:
-            print("Classifying")
+        
+        while not self.stop_signal.is_set() or not self.data_queue.empty():
+            print("Classifying...")
             data = self.data_queue.get()
             try:
                 signal = np.frombuffer(data, dtype=np.int16)
-                # Normalize to float32 in range [-1, 1] so it can be processed by librosa 
+                # # Normalize to float32 in range [-1, 1] so it can be processed by librosa 
                 signal = signal.astype(np.float32) / np.iinfo(np.int16).max
-
+                
                 predicted_class = self.audio_clf.predict_signal(signal)
                 self.prediction_array.append(predicted_class)
                 print(f'Predicted Class: {predicted_class}')
@@ -57,12 +59,15 @@ class RealTimeClassification():
         threading.Thread(target=self.audio_streaming_thread, args=(stream,)).start()
         threading.Thread(target=self.audio_processing_thread).start()
         
-        try:
-            while True:
-                pass
-        except KeyboardInterrupt:
-            print("Recording Stopped")
-
+        # try:
+        #     while True:
+        #         pass
+        # except KeyboardInterrupt:
+        #     print("Recording Stopped")
+        #     self.stop_signal.set()
+        print("Recording")
+        time.sleep(3)
+        print("Ending Recording")
         # End recording
         stream.stop_stream()
         stream.close()
@@ -75,7 +80,7 @@ class RealTimeClassification():
             wf.setframerate(self.cfg.real_time.sample_rate)
             wf.writeframes(b''.join(self.frames))
           
-        if not self.data_queue: 
+        if self.data_queue.empty(): 
             with open(self.cfg.real_time.prediction_csv, 'w') as f:
                 for prediction in self.prediction_array:
                     print(prediction)

@@ -5,7 +5,7 @@ import numpy as np
 import hydra 
 import os
 from omegaconf import DictConfig, OmegaConf
-
+import matplotlib.pyplot as plt
 class _Audio_Classifier:
     
 
@@ -96,7 +96,7 @@ class _Audio_Classifier:
         logits = self.model.predict(mfcc)
         probability = self.sigmoid(logits)
         predicted_class = self._mappings[int(probability > self.cfg.predictions.threshold)]
-        print(f'Prediction {predicted_class}')
+        print(f'Prediction {predicted_class} | Prediction Probability {probability}')
         return predicted_class
                     
     def predict(self, file_path):
@@ -128,8 +128,13 @@ class _Audio_Classifier:
         return all_predictions
 
 
- 
-
+    def plot_mfcc(self, mfcc):
+        plt.figure(figsize=(10, 4))
+        librosa.display.specshow(mfcc[i], x_axis='time', sr=self.cfg.predictions.sample_rate)
+        plt.colorbar()
+        plt.title('MFCC')
+        plt.tight_layout()
+        plt.show()
 def Audio_Classifier():    
     """Factory function for Audio Classifier Class 
 
@@ -140,8 +145,8 @@ def Audio_Classifier():
     
     return _Audio_Classifier(cfg)
 
-file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
-
+# file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
+file_path='output.wav'
 
 if __name__ == "__main__":
     # creating 2 instances of audio classifier
@@ -150,17 +155,19 @@ if __name__ == "__main__":
     ac1 = Audio_Classifier()
     
     assert ac is ac1 # Ensures that ac and ac1 are the same instance (singleton pattern is working)
-    prediction = ac.predict(file_path)
+    # prediction = ac.predict(file_path)
     # make prediction
     print("Making Prediction")
 
     
     # single_prediction = ac.predict_signal(mfcc, is_MFCC=True)
+    mfcc = ac.preprocess(file_path)
     print("looping predictions")
     for i in range(11):
-        mfcc = ac.preprocess(file_path)[i]
-        single_prediction = ac.predict_signal(mfcc, is_MFCC=True)
-        print(f"Prediction:{prediction[i]} \n Single Prediction: {single_prediction}")
+        ac.plot_mfcc(mfcc)
+        print(mfcc[i].shape)
+        single_prediction = ac.predict_signal(mfcc[i], is_MFCC=True)
+        print(f"Single Prediction: {single_prediction}")
 
     
   
