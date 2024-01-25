@@ -172,7 +172,10 @@ SSH/
 SSH/eval "$(ssh-agent -s)"
 
 # Ignore Outputs
-outputs
+outputs/
 
 # Ignore train, test and validation Data 
 data_/
+
+# ignore output
+output/

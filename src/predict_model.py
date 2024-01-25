@@ -83,7 +83,6 @@ class _Audio_Classifier:
         # obtain variables
         n_mfcc = self.cfg.predictions.n_mfcc
         n_fft = self.cfg.predictions.n_fft
-        window_size = self.cfg.predictions.window_size
         sample_rate = self.cfg.predictions.sample_rate
         hop_length = self.cfg.predictions.hop_length
         if is_MFCC == False:
@@ -146,8 +145,8 @@ def Audio_Classifier():
     return _Audio_Classifier(cfg)
 
 # file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
-file_path='output.wav'
-
+file_path='output/output_0.wav'
+files_path = 'output.wav'
 if __name__ == "__main__":
     # creating 2 instances of audio classifier
     
@@ -159,15 +158,15 @@ if __name__ == "__main__":
     # make prediction
     print("Making Prediction")
 
-    
+    predictions = ac.predict(files_path)
     # single_prediction = ac.predict_signal(mfcc, is_MFCC=True)
-    mfcc = ac.preprocess(file_path)
-    print("looping predictions")
-    for i in range(11):
-        ac.plot_mfcc(mfcc)
-        print(mfcc[i].shape)
-        single_prediction = ac.predict_signal(mfcc[i], is_MFCC=True)
-        print(f"Single Prediction: {single_prediction}")
+    # mfcc = ac.preprocess(file_path)
+    # print("looping predictions")
+    # for i in range(11):
+    #     ac.plot_mfcc(mfcc)
+    #     print(mfcc[i].shape)
+    #     single_prediction = ac.predict_signal(mfcc[i], is_MFCC=True)
+    #     print(f"Single Prediction: {single_prediction}")
 
     
   
