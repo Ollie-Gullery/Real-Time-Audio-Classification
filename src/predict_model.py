@@ -70,7 +70,7 @@ class _Audio_Classifier:
         
         return MFCCs_array
     
-    def predict_signal(self, signal, is_MFCC = False):
+    def predict_signal(self, signal):
         """_summary_
         Predicts between music or speech for a singular signal
         Args:
@@ -80,16 +80,16 @@ class _Audio_Classifier:
         Returns:
             _type_: predicted class 
         """
+        # window_sample_size = int(self.cfg.predictions.window_size * self.cfg.predictions.sample_rate) # define signal length
+        # signal = signal[:window_sample_size] # ensure signal length is constant
         # obtain variables
         n_mfcc = self.cfg.predictions.n_mfcc
         n_fft = self.cfg.predictions.n_fft
         sample_rate = self.cfg.predictions.sample_rate
         hop_length = self.cfg.predictions.hop_length
-        if is_MFCC == False:
-            mfcc = librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_length)
+        
+        mfcc = librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_length)
              
-        else:
-            mfcc = signal
         mfcc = mfcc[np.newaxis, ..., np.newaxis]
         mfcc = mfcc.reshape(-1, 11, 13, 1) # reshaping as pyaudio signal different to librosa which was used to train model
         logits = self.model.predict(mfcc)

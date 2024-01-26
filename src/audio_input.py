@@ -44,17 +44,13 @@ class RealTimeClassification():
         while not self.stop_signal.is_set() or not self.data_queue.empty():
             print("Classifying...")
             data = self.data_queue.get()
-            file_path = f'output/output_{count}.wav'
+
             try:
-                self.save_single_queue_item_to_wav(data, file_path, self.cfg.real_time.channels, p.get_sample_size(self.format), self.cfg.real_time.sample_rate)
-                count += 1
-                #     signal = np.frombuffer(data, dtype=np.int16)
-                # count+=1
-                # # # Normalize to float32 in range [-1, 1] so it can be processed by librosa 
-                # signal = signal.astype(np.float32) / np.iinfo(np.int16).max
-                # mfcc = audio_clf.preprocess(file_path)
-                # signal, _ = librosa.load(file_path, sr = 22050)
-                predicted_class = self.audio_clf.predict(file_path)
+
+                signal = np.frombuffer(data, dtype=np.int16)
+                signal = signal.astype(np.float32) / np.iinfo(np.int16).max
+                signal = signal[:self.chunk]
+                predicted_class = self.audio_clf.predict_signal(signal)
                 
                 self.prediction_array.append(predicted_class)
                 print(f'Predicted Class: {predicted_class}')
@@ -82,6 +78,7 @@ class RealTimeClassification():
         print("Recording")
         time.sleep(15)
         print("Ending Recording")
+        self.stop_signal.set()
         # End recording
         stream.stop_stream()
         stream.close()
