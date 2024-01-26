@@ -80,7 +80,7 @@ class RealTimeClassification():
         #     print("Recording Stopped")
         #     self.stop_signal.set()
         print("Recording")
-        time.sleep(3)
+        time.sleep(15)
         print("Ending Recording")
         # End recording
         stream.stop_stream()
