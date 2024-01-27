@@ -1,5 +1,6 @@
 # config.yaml
 
+# Used in: prepare_dataset.py 
 preprocess: # Used in: Prepare_dataset.py 
   path: "data/raw/dataset"
   json_path: "data/processed/data.json"
@@ -11,8 +12,8 @@ preprocess: # Used in: Prepare_dataset.py
   sample_rate: 22050 # 1 second worth of loading audio with librosa is 22050 samples/second
   window_size: 0.25 # 0.25 seconds
 
-
-training: # Used in: train_model.py  
+# Used in: train_model.py  
+training: 
   train_path: "data/processed/data_train.json"
   test_path: "data/processed/data_test.json"
   validation_path: "data/processed/data_validation.json"
@@ -24,11 +25,12 @@ training: # Used in: train_model.py
   epochs: 40 
   batch_size: 32 # Number of samples before running back prop or learning step 
   patience: 5
-  threshold: 0.6 # Threshhold for Sigmoid Predictions
+  threshold: 0.7 # Threshhold for Sigmoid Predictions
   saved_model_path: "models/model.keras"
   
 # to do: hyper param optimiszation -> data aug -> more performance metrics 
 
+# used in predict_model.py
 predictions:
   data_path: 
     music: "data/raw/prediction_data/music_predict/music_predict.wav"
@@ -40,15 +42,13 @@ predictions:
   hop_length: 512 # 512 for latency reasons - can reduce to improve model 
   sample_rate: 22050 # 1 second worth of loading audio with librosa is 22050 samples/second
   window_size: 0.25 # 0.25 seconds
-  threshold: 0.6 # Threshhold for Sigmoid Predictions
+  threshold: 0.7 # Threshhold for Sigmoid Predictions
 
-
+# used in audio_input.py
 real_time:
-  # format: "pyaudio.paInt16"
   channels: 1
   sample_rate: 22050
   window_size: 0.25 # 0.25seconds
-  # CHUNK = int(SAMPLE_RATE * WINDOW_SIZE)
-  wave_output_filename: "output.wav"
+  wave_output_filename: "output.wav" # saves input into audio_input as .wav file
   prediction_csv: "predictions.csv"
   silence_threshold: 200 # what sound amplitude we define as 'silent'
