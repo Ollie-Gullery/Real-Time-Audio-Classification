@@ -1,40 +1,20 @@
-import random
-import os
-from flask import Flask, request, jsonify
-from predict_model import Audio_Classifier
+import requests
 
-# instantiting flask app 
-app = Flask(__name__)
+# server url
+URL = "http://127.0.0.1:5000/predict"
 
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    """Endpoint to predict keyword
-
-    :return (json): This endpoint returns a json file with the following format:
-        {
-            "keyword": "down"
-        }
-    """
-    # get file from POST request and save it
-    audio_file = request.files["file"]
-    file_name = str(random.randint(0, 100000))
-    audio_file.save(file_name)
-
-    # instantiate keyword spotting service singleton and get prediction
-    audio_clf = Audio_Classifier()
-    predicted_keyword = audio_clf.predict(file_name)
-
-    # we don't need the audio file any more - let's delete it!
-    os.remove(file_name)
-
-    # send back result as a json file
-    result = {"keyword": predicted_keyword}
-
-    return jsonify(result)
-
-
+# audio file
+FILE_PATH = "data/raw/prediction_data/speech_predict/speech_predict.wav"
 
 if __name__ == "__main__":
-    app.run(debug=False)
+     # open files
+    file = open(FILE_PATH, "rb")
 
+    # package stuff to send and perform POST request
+    values = {"file": (FILE_PATH, file, "audio/wav")}
+    response = requests.post(URL, files=values)
+    data = response.json()
+
+    print(f"Predicted keyword: {all_predictions})
+          

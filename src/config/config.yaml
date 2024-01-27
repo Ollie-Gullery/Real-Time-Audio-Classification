@@ -51,3 +51,4 @@ real_time:
   # CHUNK = int(SAMPLE_RATE * WINDOW_SIZE)
   wave_output_filename: "output.wav"
   prediction_csv: "predictions.csv"
+  silence_threshold: 200 # what sound amplitude we define as 'silent'
