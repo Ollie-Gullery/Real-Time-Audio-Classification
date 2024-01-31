@@ -1,63 +1,39 @@
 import random
 import os
 from flask import Flask, request, jsonify, render_template, redirect
-# from predict_model import Audio_Classifier
+from predict_model import Audio_Classifier
 import hydra
-from omegaconf import omegaconf, dictconfig
+from audio_input import RealTimeClassification
+from omegaconf import DictConfig, OmegaConf
 # instantiting flask app 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend/templates')
 
 
-@app.route("/predict", methods=["Get", "POST"])
+@app.route("/", methods=["Get", "POST"])
 def home():
-    return render_template("src/frontend/templates/index.html")
-    # return "Hello!"
-
-# @app.route("/predict", methods=["POST"])
-# def predict(cfg: dictconfig):
-#     """Endpoint to predict keyword
-
-#     :return (json): This endpoint returns a json file with the following format:
-#         {
-#             "keyword": "down"
-#         }
-#     """
-#     # get file from POST request and save it
-#     audio_file = request.files["file"]
-#     file_name = str(random.randint(0, 100000))
-#     audio_file.save(file_name)
-
-#     # instantiate keyword spotting service singleton and get prediction
-#     audio_clf = Audio_Classifier()
-#     predicted_keyword = audio_clf.predict(file_name)
-
-#     # we don't need the audio file any more - let's delete it!
-#     os.remove(cfg.real_time.wave_output_filename)
-
-#     # send back result as a json file
-#     result = {"keyword": predicted_keyword}
-
-#     return jsonify(result)
-
-
-# @app.route("/audio_clf", methods=["POST"])
-# def predict(cfg: dictconfig):
-#     """Endpoint to predict keyword
-
-#     :return (json): This endpoint returns a json file with the following format:
-#         {
-#             "keyword": "down"
-#         }
-#     """
-#     # get button click and record it
+    action = request.json.get('action')
+    if action == 'start':
+        # Code to start the action
+        run_model()  # Assuming run_mode starts the action
+        return jsonify({"message": "Action started"})
+    elif action == 'stop':
+        # Code to stop the action
+        # Implement the logic to stop what run_mode() starts
+        return jsonify({"message": "Action stopped"})
+    return jsonify({"error": "Invalid action"}), 400
     
+    return render_template("index.html")
+
+
+def run_model():
+        
+    # instantiate audio classifier
+    audio_clf = Audio_Classifier()
+    # load hydra configs
+    cfg = OmegaConf.load("src/config/config.yaml")
     
-#     # invoke classification model 
-    
-    
-#     # remove ouput file (optional)
-    
-    
+    # instantiate RTC 
+    rtc = RealTimeClassification(audio_clf, cfg)
 
 
 
