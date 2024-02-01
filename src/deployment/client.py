@@ -1,11 +1,11 @@
 import requests
 
 # server url
-URL = "http://127.0.0.1:5000/predict"
+URL = "http://127.0.0.1:5050/predict"
 
 
-# audio file
-TEST_AUDIO_FILE_PATH = "/Users/OliverGullery/Desktop/audio/data/raw/prediction_data/music_predict/music_predict.wav"
+# Audio File
+TEST_AUDIO_FILE_PATH = "/Users/OliverGullery/Desktop/audio/data/raw/prediction_data/speech_predict/speech_predict.wav"
 
 if __name__ == "__main__":
      # open files

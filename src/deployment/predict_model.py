@@ -140,14 +140,14 @@ def Audio_Classifier():
     :return _Audio_Classifier._instance:
     """
     
-    cfg = OmegaConf.load("src/config/config.yaml")
+    cfg = OmegaConf.load("/Users/OliverGullery/Desktop/audio/src/config/config.yaml")
     
     return _Audio_Classifier(cfg)
 
-# file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
-file_path='output/output_0.wav'
-files_path = 'output.wav'
-test_path = 'output_wav/temp_audio_20240131174613881306.wav'
+file_path =  "data/raw/prediction_data/speech_predict/speech_predict.wav"
+# file_path='output/output_0.wav'
+# files_path = 'output.wav'
+# test_path = 'output_wav/temp_audio_20240131174613881306.wav'
 if __name__ == "__main__":
     # creating 2 instances of audio classifier
     
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     # make prediction
     print("Making Prediction")
 
-    predictions = ac.predict(files_path)
+    predictions = ac.predict(file_path)
 
     
   

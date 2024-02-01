@@ -1,5 +1,5 @@
-# install with conda env create -f audio.yml 
-name: 'audio'
+# install with conda env create -f audio.yml
+name: "audio"
 channels:
   - conda-forge
   - defaults
@@ -19,16 +19,15 @@ dependencies:
   - tensorflow
   - librosa
   - keras
-  - hydra-core  # Added Hydra
-  - omegaconf  # Added OmegaConf
-  - gunicorn   # Added Gunicorn
-  - flask      # Added Flask
+  - hydra-core # Added Hydra
+  - omegaconf # Added OmegaConf
+  - gunicorn # Added Gunicorn
+  - flask # Added Flask
   - scipy
+  - uwsgi
   - pip:
       - graphviz
       - mglearn
       - psutil>=5.7.2
       - audiomentations # added audiomentations
       - pyaudio==0.2.12
-
-   
