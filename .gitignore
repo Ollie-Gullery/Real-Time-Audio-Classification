@@ -179,3 +179,5 @@ data_/
 
 # ignore output
 output/
+
+output_wav/

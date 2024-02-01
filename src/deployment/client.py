@@ -1,42 +1,26 @@
-import random
-import os
-from flask import Flask, request, jsonify, render_template, redirect
-from predict_model import Audio_Classifier
-import hydra
-from audio_input import RealTimeClassification
-from omegaconf import DictConfig, OmegaConf
-# instantiting flask app 
-app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend/templates')
+import requests
+
+# server url
+URL = "http://127.0.0.1:5000/predict"
 
 
-@app.route("/", methods=["Get", "POST"])
-def home():
-    action = request.json.get('action')
-    if action == 'start':
-        # Code to start the action
-        run_model()  # Assuming run_mode starts the action
-        return jsonify({"message": "Action started"})
-    elif action == 'stop':
-        # Code to stop the action
-        # Implement the logic to stop what run_mode() starts
-        return jsonify({"message": "Action stopped"})
-    return jsonify({"error": "Invalid action"}), 400
-    
-    return render_template("index.html")
-
-
-def run_model():
-        
-    # instantiate audio classifier
-    audio_clf = Audio_Classifier()
-    # load hydra configs
-    cfg = OmegaConf.load("src/config/config.yaml")
-    
-    # instantiate RTC 
-    rtc = RealTimeClassification(audio_clf, cfg)
-
-
+# audio file
+TEST_AUDIO_FILE_PATH = "/Users/OliverGullery/Desktop/audio/data/raw/prediction_data/music_predict/music_predict.wav"
 
 if __name__ == "__main__":
-    app.run(debug=False)
+     # open files
+     file = open(TEST_AUDIO_FILE_PATH, "rb")
 
+     try:
+          values = {"file": (TEST_AUDIO_FILE_PATH, file, "audio/wav")}
+          response = requests.post(URL, files=values)
+     except Exception as e:
+          print(f"Error getting response: {e}")
+
+     try:
+          data = response.json()
+     except Exception as e:
+          print(f'Error Converting data to json format: {e}')
+
+     print(f"Predicted keyword: {data}")
+          

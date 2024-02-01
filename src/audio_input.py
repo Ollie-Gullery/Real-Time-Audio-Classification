@@ -1,7 +1,7 @@
 import pyaudio
 import wave
 import tensorflow as tf
-from predict_model import Audio_Classifier
+from deployment.predict_model import Audio_Classifier
 import numpy as np
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -11,7 +11,7 @@ import queue
 import time 
 import os
 import audioop
-# audio_clf = Audio_Classifier()
+
 class RealTimeClassification():
     def __init__(self, audio_clf, cfg):
         self.audio_clf = Audio_Classifier() # create instance of audio classifier
@@ -75,7 +75,7 @@ class RealTimeClassification():
                 if rms > silence_threshold:
                     predicted_class = self.audio_clf.predict(file_path)
                 else:
-                    predicted_class = "silent"
+                    predicted_class = "no noise detected"
                 self.prediction_array.append(predicted_class)
                 print(f'Predicted Class: {predicted_class}')
                 os.remove(file_path)
