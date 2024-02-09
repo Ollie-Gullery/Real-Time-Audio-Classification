@@ -25,9 +25,11 @@ dependencies:
   - flask # Added Flask
   - scipy
   - uwsgi
+  - portaudio == 19.7.0
+
   - pip:
       - graphviz
       - mglearn
       - psutil>=5.7.2
       - audiomentations # added audiomentations
-      - pyaudio==0.2.12
+      - pyaudio == 0.2.13

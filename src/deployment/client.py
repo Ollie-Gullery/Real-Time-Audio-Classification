@@ -17,10 +17,8 @@ if __name__ == "__main__":
      except Exception as e:
           print(f"Error getting response: {e}")
 
-     try:
-          data = response.json()
-     except Exception as e:
-          print(f'Error Converting data to json format: {e}')
+     data = response.json()
+
 
      print(f"Predicted keyword: {data}")
           

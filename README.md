@@ -1,7 +1,7 @@
 audio classification
 ==============================
 
-Music Speech Classification Project
+Music Speech Classification Project. Network Architecture built with Tensorflow and Keras. Audio processing performed with librsoa and PyAudio
 
 Project Organization
 ------------

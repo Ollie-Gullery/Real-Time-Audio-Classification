@@ -1,7 +1,7 @@
 import pyaudio
 import wave
 import tensorflow as tf
-from deployment.predict_model import Audio_Classifier
+from deployment.classifier.predict_model import Audio_Classifier
 import numpy as np
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -11,6 +11,11 @@ import queue
 import time 
 import os
 import audioop
+
+
+portaudio_text = pyaudio.get_portaudio_version_text()
+
+print(f"PortAudio version (text): {portaudio_text}")
 
 class RealTimeClassification():
     def __init__(self, audio_clf, cfg):
