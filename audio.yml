@@ -25,7 +25,7 @@ dependencies:
   - flask # Added Flask
   - scipy
   - uwsgi
-  - portaudio == 19.7.0
+  # - portaudio == 19.7.0
 
   - pip:
       - graphviz
