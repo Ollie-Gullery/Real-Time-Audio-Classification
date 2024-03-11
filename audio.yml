@@ -25,11 +25,22 @@ dependencies:
   - flask # Added Flask
   - scipy
   - uwsgi
-  - portaudio == 19.7.0
+  # - portaudio == 19.7.0 # portaudio conda installation error
 
+  # for pip installations: python -m pip install <package>
   - pip:
       - graphviz
       - mglearn
       - psutil>=5.7.2
       - audiomentations # added audiomentations
-      - pyaudio == 0.2.13
+      # - pyaudio == 0.2.11 # pyaudio virtual enviornment installation not working, install with: brew install portaudio --HEAD pip install pyaudio
+      # ln -s /usr/local/lib/libportaudio.2.dylib /Users/OliverGullery/miniconda3/envs/audio/lib/libportaudio.2.dylib -> linking brew portaudio to file where conda virtual env is
+# portaudio          anaconda/osx-64::portaudio-19.6.0-h647c56a_4
+# pyaudio            anaconda/osx-64::pyaudio-0.2.11-py37h1de35cc_2
+
+# port audio setup instructions
+# brew install portaudio
+# sudo find / -name "portaudio.h"
+# output: /usr/local/Cellar/portaudio/19.7.0/include/portaudio.h
+# then run
+# python -m pip install --global-option='build_ext' --global-option='-I/usr/local/Cellar/portaudio/19.7.0/include/portaudio.h ' --global-option='-L/usr/local/Cellar/portaudio/19.7.0/lib' pyaudio

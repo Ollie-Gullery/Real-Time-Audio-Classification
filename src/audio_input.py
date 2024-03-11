@@ -13,15 +13,12 @@ import os
 import audioop
 
 
-portaudio_text = pyaudio.get_portaudio_version_text()
-
-print(f"PortAudio version (text): {portaudio_text}")
 
 class RealTimeClassification():
     def __init__(self, audio_clf, cfg):
         self.audio_clf = Audio_Classifier() # create instance of audio classifier
         self.cfg = cfg 
-        self.chunk = int(self.cfg.real_time.sample_rate * self.cfg.real_time.window_size) # creat chunk of appropriate size
+        self.chunk = int(self.cfg.real_time.sample_rate * self.cfg.real_time.window_size) # creat  chunk of appropriate size
         self.format = pyaudio.paInt16
         self.frames = []
         self.stop_signal = threading.Event()
@@ -86,16 +83,30 @@ class RealTimeClassification():
                 os.remove(file_path)
             except Exception as e:
                 print(f"Error Processing: {e}")
+
     
     def real_time_audio_classification(self):
         """_summary_
         Starts the stream and calls audio streaming and processing thread
         """
         p = pyaudio.PyAudio()
+        # code adopted from reference 4
+        print("----------------------record device list---------------------")
+        info = p.get_host_api_info_by_index(0)
+        numdevices = info.get('deviceCount')
+        for i in range(0, numdevices):
+            if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+                print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
+
+        print("-------------------------------------------------------------")
+        index = int(input())
+        print("recording via index "+str(index))
+        # end of referenced code
+
         stream = p.open(format=self.format,
                 channels=self.cfg.real_time.channels,
                 rate=self.cfg.real_time.sample_rate ,
-                input=True,
+                input=True, input_device_index=index,
                 frames_per_buffer=self.chunk)
         print("Real-Time Audio Classification started. Press ctrl+c to stop")
         

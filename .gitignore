@@ -181,3 +181,9 @@ data_/
 output/
 
 output_wav/
+
+# ignore test file
+src/pyaudio_test.py
+
+# ignore second audio env
+audio_2.yml
