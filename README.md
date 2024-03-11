@@ -6,8 +6,9 @@ Music Speech Classification Project. Network Architecture built with Tensorflow 
 To Run File:
 
 1. Clone the repo: `git clone https://github.com/Ollie-Gullery/Real-Time-Audio-Classification.git`
-2. Get Run Permissions: `chmod +x setup_and_run.sh`
-3. Start audio stream to classify between music & speech: `setup_and_run.sh`
+2. Navigate to file: `cd audio`
+3. Get Run Permissions: `chmod +x setup_and_run.sh`
+4. Start audio stream to classify between music & speech: `./setup_and_run.sh`
 
 
 Project Organization

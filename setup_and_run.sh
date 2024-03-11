@@ -4,7 +4,6 @@
 ENV_NAME=audio
 
 
-cd audio
 
 # Create a Conda environment with required packages
 conda env create -f audio.yml
