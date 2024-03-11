@@ -1,9 +1,9 @@
 audio classification
 ==============================
 
-Music Speech Classification Project. Network Architecture built with Tensorflow and Keras. Audio processing performed with librosa, audiomentations, and PyAudio 
+Music Speech Classification Project. Network Architecture built with Tensorflow and Keras. Audio processing performed with librosa, audiomentations, and PyAudio. 
 
-To Run File:
+`MacOS`: To Run File (assumes conda is already installed):
 
 1. Clone the repo: `git clone https://github.com/Ollie-Gullery/Real-Time-Audio-Classification.git`
 2. Navigate to file: `cd Real-Time-Audio-Classification`

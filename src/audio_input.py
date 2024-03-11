@@ -99,6 +99,7 @@ class RealTimeClassification():
                 print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
 
         print("-------------------------------------------------------------")
+        print("Note: Sounds with an amplitude lower than 200 will be classified as 'not detected'\n\nPlease Input the correct input device number:")
         index = int(input())
         print("recording via index "+str(index))
         # end of referenced code
