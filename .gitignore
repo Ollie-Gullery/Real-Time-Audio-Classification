@@ -190,3 +190,9 @@ audio_2.yml
 
 # ignore predictions.csv
 predictions.csv
+
+# ignore output.wav
+output.wav
+
+# safe keeping readme folder 
+README_2.md
