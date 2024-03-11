@@ -33,7 +33,7 @@ Project Organization
     │
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
-    │   ├── **audio_input.py  <- Real Time Classification File with Audio Stream**
+    │   ├── **audio_input.py**  <- Real Time Classification File with Audio Stream**
     │   │
     │   ├── config.yml    <- Contains all configurations for files (model configurations, preprocessing configs etc.)
     │   ├── prepare_data           <- Scripts to download or generate data
