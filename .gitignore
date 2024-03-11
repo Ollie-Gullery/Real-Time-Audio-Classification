@@ -187,3 +187,6 @@ src/pyaudio_test.py
 
 # ignore second audio env
 audio_2.yml
+
+# ignore predictions.csv
+predictions.csv
