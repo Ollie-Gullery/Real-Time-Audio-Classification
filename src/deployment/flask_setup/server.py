@@ -1,24 +1,17 @@
-import sys
+
 import os
-
-base_dir = os.path.join('/Users/OliverGullery/Desktop/audio/src/deployment')
-
-# Add this directory to sys.path to allow importing of 'classifier'
-sys.path.insert(0, base_dir)
-
-from classifier.predict_model import Audio_Classifier
-
+import sys
+# from deployment.classifier.predict_model import _Audio_Classifier
 import random
-
 import tempfile
 from flask import Flask, request, jsonify
 import hydra
 from omegaconf import DictConfig, OmegaConf
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from classifier.predict_model import Audio_Classifier
 
 
-
-
-# instantiting flask app 
+# # instantiting flask app 
 app = Flask(__name__)
 
 

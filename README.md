@@ -10,6 +10,32 @@ Music Speech Classification Project. Network Architecture built with Tensorflow 
 3. Get Run Permissions: `chmod +x setup_and_run.sh`
 4. Start audio stream to classify between music & speech: `./setup_and_run.sh`
 
+*Brief Project Overview*
+
+## Project Summary
+This project is designed to differentiate between two specific types of audio in real-time. It utilizes audio datasets sourced from Kaggle, with data preparation and processing conducted through the script located at *(src/prepare_data/prepare_data.py)*. The training was performed using a Convolutional Neural Network (CNN) as outlined in *(src/models/train_model.py)*, achieving a **test accuracy of 92%**. For real-time audio streaming and processing, PyAudio was employed, enabling the model to generate predictions based on segments of audio data lasting 0.25 seconds, equivalent to a sampling rate of 5500 Hz.
+
+*Note*
+The configurations of the project are all listed in `src/config/config.yaml`, it contains model configurations as well as preprocessing configurations such as sample rate, resoulution of frequency domain etc. 
+
+### Data Preparation
+
+- Data was prepared utilizing a sliding window approach that processed data into 0.25 second windows then subsequently processing it into a MFCC which was stored as a json file. 
+- Data being trained on 0.25 segements was done to achieve 'real time' classification effect. 
+- Dataset diversity was enhanced using the `audiomentations` library, bolstering the model's ability to generalize across varied audio inputs.
+
+### Training (Model)
+
+- Constructed using Tensorflow and Keras, the model is specifically designed for binary classification challenges. Thus, I employed Binary Cross Entropy (BCE) with logits for its loss function to finely tune this focus.
+- A key objective was to reduce latency whilst minimizing performance loss. Thus, my model architecture features three convolutional layers, complemented by batch normalization and max pooling, culminating in a dense layer before producing the output. To curb overfitting, L2 regularization was integrated. This architecture effectively balanced accuracy with computational efficiency making it well suited for real-time classification tasks.
+
+### Performing Real Time Classifiation
+*Note: This is done through the src/audio_input.py file*
+
+- Real-time classification was performed with streaming via PyAudio.
+- To manage the streaming 'chunks' efficiently, I utilized threading, allowing for the simultaneous storage and processing of these chunks. A queue system was implemented to hold the processed audio chunks, which were then dequeued once the model generated a prediction.
+
+
 
 Project Organization
 ------------
@@ -35,7 +61,7 @@ Project Organization
     │   ├── __init__.py    <- Makes src a Python module
     │   ├── **audio_input.py**  <- Real Time Classification File with Audio Stream
     │   │
-    │   ├── config.yml    <- Contains all configurations for files (model configurations, preprocessing configs etc.)
+    │   ├── config/config.yml    <- Contains all configurations for files (model configurations, preprocessing configs etc.)
     │   ├── prepare_data           <- Scripts to download or generate data
     │   │   └── **prepare_dataset.py**
     │   │   └── data_augmentations.py

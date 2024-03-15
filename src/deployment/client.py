@@ -11,11 +11,9 @@ if __name__ == "__main__":
      # open files
      file = open(TEST_AUDIO_FILE_PATH, "rb")
 
-     try:
-          values = {"file": (TEST_AUDIO_FILE_PATH, file, "audio/wav")}
-          response = requests.post(URL, files=values)
-     except Exception as e:
-          print(f"Error getting response: {e}")
+     values = {"file": (TEST_AUDIO_FILE_PATH, file, "audio/wav")}
+     response = requests.post(URL, files=values)
+
 
      data = response.json()
 
