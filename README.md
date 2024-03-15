@@ -20,19 +20,19 @@ This project is designed to differentiate between two specific types of audio in
 ### Data Preparation
 
 - Data was prepared using a sliding window, ie. segmenting it into 0.25-second intervals before converting these segments into Mel Frequency Cepstral Coefficients (MFCCs (compact representation of audio signal)) with `librosa`; which were then saved in a JSON file. 
-- Model was trained on these 0.25 segments to obtain 'real-time' classification effect. 
+- *Model was trained on these 0.25 segments* to obtain 'real-time' classification effect. 
 - To refine the model's adaptability, dataset variability was enhanced using the `audiomentations` library, improving the model's ability to generalize across varied audio inputs.
 
 ### Training (Model)
 
-- Constructed using Tensorflow and Keras, the model is specifically designed for binary classification challenges. Thus, I employed Binary Cross Entropy (BCE) with logits for its loss function to finely tune this focus.
-- A key objective was to reduce latency whilst minimizing performance loss. Thus, my model architecture features three convolutional layers, complemented by batch normalization and max pooling, culminating in a dense layer before producing the output. To curb overfitting, L2 regularization was integrated. This architecture effectively balanced accuracy with computational efficiency making it well suited for real-time classification tasks.
+- Constructed using `Tensorflow` and `Keras`, the model is specifically designed for binary classification challenges. Thus, I employed *Binary Cross Entropy (BCE) with logits* for its loss function to finely tune this focus.
+- A key objective was to *reduce latency whilst minimizing performance loss*. Thus, my model architecture features three convolutional layers, complemented by batch normalization and max pooling, culminating in a dense layer before producing the output. To curb overfitting, L2 regularization was integrated. This architecture effectively balanced accuracy with computational efficiency making it well suited for real-time classification tasks.
 
 ### Performing Real Time Classifiation
 *Note: This is done through the src/audio_input.py file*
 
 - Real-time classification was performed with streaming via PyAudio.
-- To manage the streaming 'chunks' efficiently, I utilized threading, allowing for the simultaneous storage and processing of these chunks. A queue system was implemented to hold the processed audio chunks, which were then dequeued once the model generated a prediction.
+- To manage the streaming 'chunks' efficiently, I utilized **threading**, allowing for the simultaneous storage and processing of these chunks. A *queue system was implemented to hold the processed audio chunks*, which were then dequeued once the model generated a prediction.
 
 
 
