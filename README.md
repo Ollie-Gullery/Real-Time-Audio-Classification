@@ -1,4 +1,4 @@
-audio classification
+Real Time Audio Classification
 ==============================
 
 Music Speech Classification Project. Network Architecture built with Tensorflow and Keras. Audio processing performed with librosa, audiomentations, and PyAudio. 
