@@ -15,7 +15,7 @@ Music Speech Classification Project. Network Architecture built with Tensorflow 
 ## Project Summary
 This project is designed to differentiate between two specific types of audio in real-time. It utilizes audio datasets sourced from Kaggle, with data preparation and processing conducted through the script located at *(src/prepare_data/prepare_data.py)*. The training was performed using a Convolutional Neural Network (CNN) as outlined in *(src/models/train_model.py)*, achieving a **test accuracy of 92%**. For real-time audio streaming and processing, PyAudio was employed, enabling the model to generate predictions based on segments of audio data lasting 0.25 seconds, equivalent to a sampling rate of 5500 Hz.
 
-*Note: The configurations of the project are all listed in `src/config/config.yaml`, it contains model configurations as well as preprocessing configurations such as sample rate, resolution of frequency domain, epochs, hop length etc.* 
+*Note: The configurations of the project are all listed in `src/config/config.yaml`, it contains model configurations as well as preprocessing configurations such as sample rate, resolution of frequency domain, epochs, hop length etc., configurations were performed using `Hydra` to create hierarchial configurations* 
 
 ### Data Preparation
 
