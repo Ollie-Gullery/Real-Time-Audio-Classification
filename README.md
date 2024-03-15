@@ -32,7 +32,7 @@ This project is designed to differentiate between two specific types of audio in
 *Note: This is done through the src/audio_input.py file*
 
 - Real-time classification was performed with streaming via PyAudio.
-- To manage the streaming 'chunks' efficiently, I utilized **threading**, allowing for the simultaneous storage and processing of these chunks. A *queue system was implemented to hold the processed audio chunks*, which were then dequeued once the model generated a prediction.
+- To manage storing and processing the streamed audio chunks efficiently, I utilized **threading**, allowing for the simultaneous storage and processing of these chunks. A *queue system was implemented to hold the processed audio chunks*, which were then dequeued once the model generated a prediction based of the queued item.
 
 
 
